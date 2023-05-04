@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import CardList from '../components/CardList'
 import Scroll from "../components/Scroll";
+import ErrorBoundry from "../components/ErrorBoundry";
 import SearchBox from '../components/SearchBox'
 import './App.css'
 
@@ -10,10 +11,11 @@ class App extends Component {
     this.state = {
       robots: [],
       searchfield: ''
+    
   }
- 
 }
-  componentDidMount() {
+
+  componentDidMount() { 
     fetch('https://jsonplaceholder.typicode.com/users')
     .then(response => response.json())
     .then(users => this.setState({ robots: users}))
@@ -26,7 +28,7 @@ class App extends Component {
 
   render() {
     const {robots, searchfield} = this.state
-    const filteredRobots = robots.filter(robot => {
+    const filteredRobots = robots.filter(robot => { 
       return robot.name.toLowerCase().includes(searchfield.toLowerCase())
     })
     return !robots.length ? 
@@ -36,7 +38,9 @@ class App extends Component {
           <h1 className="f1">RoboFriends</h1>
             <SearchBox searchChange={this.onSearchChange}/>
             <Scroll>
+              <ErrorBoundry>
               <CardList robots = {filteredRobots} />
+              </ErrorBoundry>
             </Scroll>
         </div>
       )
